@@ -1,8 +1,61 @@
-﻿@page "/servers/edit"
-
+﻿@page "/servers/{id:int}"
 
 <h3>Edit Server</h3>
+<br />
+<br />
+
+@if (_server != null)
+{
+    <EditForm Model="_server" FormName="formServer" OnSubmit="Submit">
+        <InputNumber @bind-Value="_server.Id" hidden />
+        <div class="row mb-3">
+            <div class="col-2">
+                <label class="col-form-label">Name</label>
+            </div>
+            <div class="col-6">
+                <InputText @bind-Value="_server.Name" class="form-control"></InputText>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2">
+                <label class="col-form-label">City</label>
+            </div>
+            <div class="col-6">
+                <InputText @bind-Value="_server.City" class="form-control"></InputText>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2">
+                <label class="col-form-label">Online</label>
+            </div>
+            <div class="col-6">
+                <InputCheckbox @bind-Value="_server.IsRunning" class="form-check-input"></InputCheckbox>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        &nbsp
+        <a href="/servers" class="btn btn-primary">Close</a>
+    </EditForm>
+}
+
 
 @code {
+    [Parameter]
+    public int Id { get; set; }
 
+    [SupplyParameterFromForm]
+    private Server _server { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        _server ??= ServersRepository.GetServerById(this.Id);
+    }
+
+    private void Submit()
+    {
+        if(_server != null)
+        {
+            ServersRepository.UpdateServer(_server.Id, _server);
+        }
+    }
 }

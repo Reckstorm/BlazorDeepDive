@@ -35,7 +35,7 @@
         public static Server GetServerById(int id)
         {
             var server = Servers.FirstOrDefault(x => x.Id == id);
-            if (server == null)
+            if (server != null)
             {
                 return new Server
                 {
@@ -52,7 +52,7 @@
         {
             if (serverId != server.Id) return;
             
-            var serverToUpdate = GetServerById(serverId);
+            var serverToUpdate = Servers.FirstOrDefault(x => x.Id.Equals(serverId));
             if (serverToUpdate != null)
             {
                 serverToUpdate.City = server.City;
