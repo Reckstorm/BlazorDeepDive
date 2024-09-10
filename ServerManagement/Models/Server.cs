@@ -1,8 +1,12 @@
-﻿namespace ServerManagement.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ServerManagement.Models
 {
     public class Server
     {
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string City { get; set; }
         public bool IsRunning { get; set; }
         public int Id { get; set; }

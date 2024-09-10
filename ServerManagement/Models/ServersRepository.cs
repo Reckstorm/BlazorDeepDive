@@ -24,7 +24,7 @@
         public static void AddServer(Server server)
         {
             var maxId = Servers.Max(x => x.Id);
-            server.Id = maxId;
+            server.Id = maxId + 1;
             Servers.Add(server);
         }
 
