@@ -1,5 +1,22 @@
-﻿<p>Server is running...</p>
+﻿@if (_server != null)
+{
+    <div>
+        @_server.Name is in @_server.City is
+        <span style="color:@((_server.IsRunning?"green":"red"))">
+            @(_server.IsRunning ? "Online" : "Offline")
+        </span>
+        &nbsp;
+        <button type="button" class="btn btn-primary" @onclick="ToggleServerRunning">Toggle off/on</button>
+    </div>
+}
 
-@code {
+@code
+{
+    private Server _server { get; set; } = new Server() { City = "Toronto", Name = "Server5" };
 
+    private void ToggleServerRunning()
+    {
+        if (_server != null)
+            _server.IsRunning = !_server.IsRunning;
+    }
 }
