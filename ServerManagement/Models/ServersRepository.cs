@@ -70,6 +70,6 @@
             }
         }
 
-        public static List<Server> SearchServers(string serverFilter) => Servers.Where(s => s.Name.Equals(serverFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+        public static List<Server> SearchServers(string serverFilter) => Servers.Where(s => s.Name.Contains(serverFilter, StringComparison.OrdinalIgnoreCase)).ToList();
     }
 }

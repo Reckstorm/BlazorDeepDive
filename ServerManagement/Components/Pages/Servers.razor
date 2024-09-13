@@ -1,4 +1,5 @@
 ﻿@page "/servers"
+@rendermode InteractiveServer
 @inject NavigationManager Navigation;
 
 <h3>Servers</h3>
@@ -9,19 +10,23 @@
         @foreach (var city in cities)
         {
             <div class="col">
-                <div class="card">
+                <div class="card @(selectedCity.Equals(city)?"border border-success":"")">
                     <img src="/images/@(city).png" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <button type="button" class="btn btn-primary">@city</button>
+                        <button type="button" class="btn btn-primary" @onclick="@(() => cityNameChange(city))">@city</button>
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
-<br />
-<ServerComponent @rendermode="InteractiveServer"></ServerComponent>
-<br />
+<br/>
+
+<div class="input-group mb-3 w-500">
+    <input placeholder="Server Search" type="text" class="form-control" @bind-value="serverSearchValue" @bind-value:event="oninput" />
+    <button type="button" @onclick="HandleServerSearch" class="btn btn-outline-success">Search</button>
+</div>
+
 <br />
 <ul>
     @foreach (var server in servers)
@@ -50,6 +55,27 @@
 @code {
     private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
     private List<string> cities = CitiesRepository.GetCities();
+    private string selectedCity = "Toronto";
+    private string _serverSearchValue;
+
+    public string serverSearchValue
+    {
+        get { return _serverSearchValue; }
+        set 
+        { 
+            _serverSearchValue = value; 
+            servers = ServersRepository.SearchServers(serverSearchValue);
+        }
+    }
+    
+
+    private void cityNameChange(string cityName)
+    {
+        selectedCity = cityName;
+        servers = ServersRepository.GetServersByCity(cityName);
+        serverSearchValue = string.Empty;
+    }
+
     private void Delete(int serverId)
     {
         if(serverId > 0)
@@ -57,5 +83,11 @@
             ServersRepository.DeleteServer(serverId);
             Navigation.NavigateTo("/servers");
         }
+    }
+
+    private void HandleServerSearch()
+    {
+        servers = ServersRepository.SearchServers(serverSearchValue);
+        selectedCity = string.Empty;
     }
 }
