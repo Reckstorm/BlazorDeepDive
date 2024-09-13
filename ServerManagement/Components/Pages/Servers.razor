@@ -20,7 +20,7 @@
         }
     </div>
 </div>
-<br/>
+<br />
 
 <div class="input-group mb-3 w-500">
     <input placeholder="Server Search" type="text" class="form-control" @bind-value="serverSearchValue" @bind-value:event="oninput" />
@@ -29,9 +29,8 @@
 
 <br />
 <ul>
-    @foreach (var server in servers)
-    {
-        <li>
+    <Virtualize Items="servers" Context="server">
+        <li @key="server.Id">
             @server.Name is in @server.City is
             <span style="color:@((server.IsRunning?"green":"red"))">
                 @(server.IsRunning ? "Online" : "Offline")
@@ -43,13 +42,19 @@
                 </EditForm>
             </span>
         </li>
-    }
+    </Virtualize>
 </ul>
 
-<br/>
-<br/>
+<br />
+<br />
 
 <a href="/servers/create" class="btn btn-primary">Add server</a>
+<button class="btn btn-secondary" @onclick="@(() =>
+{
+    servers.Insert(0, new Server(){Id=0, City="Toronto", Name="ServerTest", IsRunning=false});
+})">
+    Instant add server
+</button>
 
 
 @code {
@@ -61,24 +66,32 @@
     public string serverSearchValue
     {
         get { return _serverSearchValue; }
-        set 
-        { 
-            _serverSearchValue = value; 
+        set
+        {
+            _serverSearchValue = value;
             servers = ServersRepository.SearchServers(serverSearchValue);
         }
     }
-    
+
 
     private void cityNameChange(string cityName)
     {
         selectedCity = cityName;
-        servers = ServersRepository.GetServersByCity(cityName);
         serverSearchValue = string.Empty;
+        servers = ServersRepository.GetServersByCity(cityName);
+
+        if (selectedCity == "Halifax")
+        {
+            for (int i = 16; i < 2000; i++)
+            {
+                servers.Add(new Server { Id = i, Name = $"Server{i}", City = "Halifax" });
+            }
+        }
     }
 
     private void Delete(int serverId)
     {
-        if(serverId > 0)
+        if (serverId > 0)
         {
             ServersRepository.DeleteServer(serverId);
             Navigation.NavigateTo("/servers");
