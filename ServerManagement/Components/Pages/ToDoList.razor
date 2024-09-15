@@ -3,34 +3,36 @@
 
 <h3>ToDoList</h3>
 <br />
-<button class="btn btn-primary mb-5" @onclick="@(() => AddToDoItem())" >Add a task</button>
+<button class="btn btn-primary mb-5" @onclick="AddToDoItem">Add a task</button>
 <br />
-@foreach (var toDoItem in _toDoItems)
+@if (_toDoItems != null && _toDoItems.Count > 0)
 {
-    <div class="row" @key="toDoItem.Id">
-        <div class="input-group w-50">
-            <div class="col-1">
-                <input type="checkbox" class="form-check-input mt-2" 
-                @bind-value="toDoItem.IsDone" 
-                checked="@toDoItem.IsDone" />
-            </div>
-            <div class="col-6">
-                <input type="text" class="border-0 form-control @(toDoItem.IsDone?"text-decoration-line-through":"")" @bind-value="toDoItem.Body" disabled="@toDoItem.IsDone" />
-            </div>
-            <div class="col-4 ms-3 mt-2">
-                @(toDoItem.IsDone ? $"Completed on {toDoItem.UpdatedAt.ToShortDateString()}":"")
+    @foreach (var toDoItem in _toDoItems)
+    {
+        <div class="row" @key="toDoItem.Id">
+            <div class="input-group w-50">
+                <div class="col-1">
+                    <input type="checkbox" class="form-check-input mt-2"
+                           @bind-value="toDoItem.IsDone"
+                           checked="@toDoItem.IsDone" />
+                </div>
+                <div class="col-6">
+                    <input type="text" class="border-0 form-control @(toDoItem.IsDone?"text-decoration-line-through":"")" @bind-value="toDoItem.Body" disabled="@toDoItem.IsDone" />
+                </div>
+                <div class="col-4 ms-3 mt-2">
+                    @(toDoItem.IsDone ? $"Completed on {toDoItem.UpdatedAt.ToShortDateString()}" : "")
+                </div>
             </div>
         </div>
-    </div>
-    <br />
+        <br />
+    }
 }
 @code {
     private List<ToDoItem> _toDoItems { get; set; } = ToDoItemsRepository.GetSortedToDoItems();
 
-    protected override void OnParametersSet()
+    private void AddToDoItem()
     {
-        _toDoItems.Sort((x, y) => x.IsDone.CompareTo(y.IsDone));
+        ToDoItemsRepository.AddToDoItem();
+        _toDoItems = ToDoItemsRepository.GetSortedToDoItems();
     }
-
-    private void AddToDoItem() => ToDoItemsRepository.AddToDoItem();
 }

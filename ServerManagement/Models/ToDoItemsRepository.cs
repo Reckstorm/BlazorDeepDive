@@ -11,15 +11,13 @@
             new ToDoItem() { Id = 1, Body = "To Do item 1" },
         ];
 
-        private static void SortItems()
+        private static List<ToDoItem> SortItems()
         {
-            _toDoItems.Sort((x, y) => y.Id.CompareTo(x.Id));
+            //_toDoItems.Sort((x, y) => y.Id.CompareTo(x.Id));
+            return _toDoItems.OrderBy(x => x.IsDone).ThenByDescending(x => x.Id).ToList();
         }
 
-        public static List<ToDoItem> GetSortedToDoItems()
-        {
-            return _toDoItems;
-        }
+        public static List<ToDoItem> GetSortedToDoItems() => SortItems();
 
         //public static void UpdateToDoItem(ToDoItem item)
         //{
@@ -33,11 +31,22 @@
 
         public static void AddToDoItem()
         {
-            _toDoItems.Insert(0, new ToDoItem()
+            if (_toDoItems.Count == 0)
             {
-                Id = _toDoItems.Max(x => x.Id) + 1,
-                Body = $"New Task {_toDoItems.Max(x => x.Id) + 1}"
-            });
+                _toDoItems.Add(new ToDoItem()
+                {
+                    Id = 1,
+                    Body = "New Task 1"
+                });
+            }
+            else
+            {
+                _toDoItems.Insert(0, new ToDoItem()
+                {
+                    Id = _toDoItems.Max(x => x.Id) + 1,
+                    Body = $"New Task {_toDoItems.Max(x => x.Id) + 1}"
+                });
+            }
         }
     }
 }
