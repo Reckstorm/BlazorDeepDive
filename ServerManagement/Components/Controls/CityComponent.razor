@@ -1,0 +1,21 @@
+﻿<div class="col">
+    <div class="card @(SelectedCity.Equals(City)?"border border-success":"")">
+        <img src="/images/@(City).png" class="card-img-top" alt="...">
+        <div class="card-body">
+            <button type="button" class="btn btn-primary" @onclick="@(() => SelectCity(City))">@City</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string City { get; set; } = "";
+
+    [Parameter]
+    public string SelectedCity { get; set; }
+
+    [Parameter]
+    public EventCallback<string> HandleCitySelection { get; set; }
+
+    private void SelectCity(string cityName) => HandleCitySelection.InvokeAsync(cityName);
+}

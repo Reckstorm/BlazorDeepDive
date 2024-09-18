@@ -1,22 +1,32 @@
-﻿@if (_server != null)
+﻿@inject NavigationManager Navigation
+
+@if (Server != null)
 {
-    <div>
-        @_server.Name is in @_server.City is
-        <span style="color:@((_server.IsRunning?"green":"red"))">
-            @(_server.IsRunning ? "Online" : "Offline")
+    <li @key="Server.Id">
+        @Server.Name is in @Server.City is
+        <span style="color:@((Server.IsRunning?"green":"red"))">
+            @(Server.IsRunning ? "Online" : "Offline")
+            &nbsp;
+            <a href="/servers/@Server.Id" class="btn btn-link">Edit</a>
+            &nbsp;
+            <EditForm Model="Server" FormName="@($"formDelete-{Server.Id}")" OnValidSubmit="() => Delete(Server.Id)">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </EditForm>
         </span>
-        &nbsp;
-        <button type="button" class="btn btn-primary" @onclick="ToggleServerRunning">Toggle off/on</button>
-    </div>
+    </li>
 }
 
 @code
 {
-    private Server _server { get; set; } = new Server() { City = "Toronto", Name = "Server5" };
+    [Parameter]
+    public Server Server { get; set; }
 
-    private void ToggleServerRunning()
+    private void Delete(int serverId)
     {
-        if (_server != null)
-            _server.IsRunning = !_server.IsRunning;
+        if (serverId > 0)
+        {
+            ServersRepository.DeleteServer(serverId);
+            Navigation.NavigateTo("/servers", true);
+        }
     }
 }
