@@ -4,19 +4,15 @@
 
 <h3>Servers</h3>
 <br />
-<CitiesListComponent HandleCitySelection="HandleCitySelection"></CitiesListComponent>
+<CitiesListComponent @ref="citiesListComponent" HandleCitySelection="HandleCitySelection"></CitiesListComponent>
 <br />
-<SearchBarComponent HandleSearchEvent="HandleServerSearch" SearchValue="@_searchValue"></SearchBarComponent>
+<SearchBarComponent @ref="searchBarComponent" HandleSearchEvent="HandleServerSearch"></SearchBarComponent>
 <br />
-<ServersListComponent CityName="@_selectedCity" SearchValue="@_searchValue"></ServersListComponent>
+<CascadingValue Name="SelectedCity" Value="@_selectedCity">
+    <ServersListComponent CityName="@_selectedCity" SearchValue="@_searchValue"></ServersListComponent>
+</CascadingValue>
 <br />
 <a href="/servers/create" class="btn btn-primary">Add server</a>
-@* <button class="btn btn-secondary" @onclick="@(() =>
-{
-    servers.Insert(0, new Server(){Id=0, City="Toronto", Name="ServerTest", IsRunning=false});
-})">
-    Instant add server
-</button> *@
 
 
 @code {
@@ -24,15 +20,19 @@
 
     private string _searchValue { get; set; }
 
+    private CitiesListComponent citiesListComponent;
+    private SearchBarComponent searchBarComponent;
+
     private void HandleServerSearch(string searchValue)
     {
-        _selectedCity = string.Empty;
+        citiesListComponent?.ClearSelection();
         _searchValue = searchValue;
     }
 
     private void HandleCitySelection(string cityName)
     {
         _searchValue = string.Empty;
+        searchBarComponent?.ClearSearchValue();
         _selectedCity = cityName;
     }
 }

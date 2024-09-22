@@ -11,36 +11,30 @@
         <DataAnnotationsValidator></DataAnnotationsValidator>
 
         <InputNumber @bind-Value="_server.Id" hidden />
-        <div class="row mb-3">
-            <div class="col-2">
-                <label class="col-form-label">Name</label>
-            </div>
-            <div class="col-6">
+
+        <FieldComponent Label="Name">
+            <InputComponent>
                 <InputText @bind-Value="_server.Name" class="form-control"></InputText>
-            </div>
-            <div class="col">
+            </InputComponent>
+            <ValidationComponent>
                 <ValidationMessage For="() => _server.Name" />
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-2">
-                <label class="col-form-label">City</label>
-            </div>
-            <div class="col-6">
+            </ValidationComponent>
+        </FieldComponent>
+
+        <FieldComponent Label="City">
+            <InputComponent>
                 <InputText @bind-Value="_server.City" class="form-control"></InputText>
-            </div>
-            <div class="col">
+            </InputComponent>
+            <ValidationComponent>
                 <ValidationMessage For="() => _server.City" />
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-2">
-                <label class="col-form-label">Online</label>
-            </div>
-            <div class="col-6">
+            </ValidationComponent>
+        </FieldComponent>
+
+        <FieldComponent Label="City">
+            <InputComponent>
                 <InputCheckbox @bind-Value="_server.IsRunning" class="form-check-input"></InputCheckbox>
-            </div>
-        </div>
+            </InputComponent>
+        </FieldComponent>
         <button type="submit" class="btn btn-primary">Update</button>
         &nbsp
         <a href="/servers" class="btn btn-primary">Close</a>

@@ -1,4 +1,4 @@
-﻿<div class="input-group mb-3 w-50">
+﻿<div class="input-group mb-3 input-width">
     <input placeholder="Server Search" type="text" class="form-control" @bind-value="SearchValue" />
     <button type="button" @onclick="PerformSearch" class="btn btn-outline-success">Search</button>
 </div>
@@ -7,8 +7,9 @@
     [Parameter]
     public EventCallback<string> HandleSearchEvent { get; set;  }
 
-    [Parameter]
     public string SearchValue { get; set; }
+
+    public void ClearSearchValue() => this.SearchValue = string.Empty;
 
     private void PerformSearch() => HandleSearchEvent.InvokeAsync(SearchValue);
 
