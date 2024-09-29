@@ -1,0 +1,11 @@
+﻿@if(ToDoItems != null && ToDoItems.Count > 0)
+{
+    <Virtualize Items="ToDoItems" Context="toDoItem">
+        <ToDoItemComponent toDoItem="toDoItem"/>
+    </Virtualize>
+}
+
+@code {
+    [Parameter]
+    public List<ToDoItem> ToDoItems { get; set; }
+}

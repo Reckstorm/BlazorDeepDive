@@ -1,0 +1,34 @@
+﻿@page "/todo"
+@rendermode InteractiveServer
+
+<h3>ToDoList</h3>
+<br />
+<button class="btn btn-primary mb-5" @onclick="AddToDoItem">Add a task</button>
+<br />
+<div>
+    @if (_toDoItems != null && _toDoItems.Count > 0)
+    {
+        <ItemsListComponent ToDoItems="_toDoItems"></ItemsListComponent>
+    }
+</div>
+
+
+@code {
+    private List<ToDoItem> _toDoItems { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        _toDoItems = ToDoItemsRepository.GetSortedToDoItems();
+        int start = _toDoItems.Last().Id;
+        for (int i = start + 1; i < 2000; i++)
+        {
+            _toDoItems.Add(new ToDoItem() { Body = $"New Item {i}", Id = i });
+        }
+    }
+
+    private void AddToDoItem()
+    {
+        ToDoItemsRepository.AddToDoItem();
+        _toDoItems = ToDoItemsRepository.GetSortedToDoItems();
+    }
+}
