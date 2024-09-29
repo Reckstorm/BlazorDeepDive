@@ -1,11 +1,14 @@
-﻿<div class="input-group mb-3 input-width">
+﻿<div class="input-group mb-3 input-width" @attributes=OtherAttributes>
     <input placeholder="Server Search" type="text" class="form-control" @bind-value="SearchValue" />
     <button type="button" @onclick="PerformSearch" class="btn btn-outline-success">Search</button>
 </div>
 
 @code {
     [Parameter]
-    public EventCallback<string> HandleSearchEvent { get; set;  }
+    public EventCallback<string> HandleSearchEvent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> OtherAttributes { get; set; }
 
     public string SearchValue { get; set; }
 

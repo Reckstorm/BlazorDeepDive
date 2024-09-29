@@ -2,20 +2,29 @@
 
 @if (Server != null)
 {
-    <li @key="Server.Id" style="background-color: @(GetBGColor())">
-        @Server.Name is in @Server.City is
-        <span style="color:@((Server.IsRunning?"green":"red"))">
-            @(Server.IsRunning ? "Online" : "Offline")
-            &nbsp;
-
+    <tr @key="Server.Id" style="background-color: @(GetBGColor())">
+        <td>
+            @Server.Name
+        </td>
+        <td>
+            @Server.City
+        </td>
+        <td>
+            <span style="color:@((Server.IsRunning?"green":"red"))">
+            @(Server.IsRunning ? "Online" : "Offline")</span>
+        </td>
+        <td>
             @if (Server.IsRunning)
             {
-                <span style="color:black">People on server: @(new Random().Next(0, 10000))</span>
+                <span style="color:black">@(new Random().Next(0, 10000))</span>
             }
-
-            &nbsp;
-
-            @if(Server.IsRunning)
+            else
+            {
+                <span>N/A</span>
+            }
+        </td>
+        <td>
+            @if (Server.IsRunning)
             {
                 <button class="btn btn-outline-danger" @onclick="@(() => Server.IsRunning = false)">Turn Off</button>
             }
@@ -23,15 +32,15 @@
             {
                 <button class="btn btn-outline-success" @onclick="@(() => Server.IsRunning = true)">Turn On</button>
             }
-
-            &nbsp;
-            <a href="/servers/@Server.Id" class="btn btn-link">Edit</a>
-            &nbsp;
+            <a href="/servers/@Server.Id" class="btn btn-outline-primary">Edit</a>
+            <button type="button" class="btn btn-outline-danger" @onclick="@(() => Delete(Server.Id))">Delete</button>
+        </td>
+@*         <td>
             <EditForm Model="Server" FormName="@($"formDelete-{Server.Id}")" OnValidSubmit="() => Delete(Server.Id)">
                 <button type="submit" class="btn btn-danger">Delete</button>
             </EditForm>
-        </span>
-    </li>
+        </td> *@
+    </tr>
 }
 
 @code

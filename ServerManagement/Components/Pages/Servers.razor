@@ -6,7 +6,7 @@
 <br />
 <CitiesListComponent @ref="citiesListComponent" HandleCitySelection="HandleCitySelection"></CitiesListComponent>
 <br />
-<SearchBarComponent @ref="searchBarComponent" HandleSearchEvent="HandleServerSearch"></SearchBarComponent>
+<SearchBarComponent @ref="searchBarComponent" HandleSearchEvent="HandleServerSearch" style="width: 1000px"></SearchBarComponent>
 <br />
 <CascadingValue Name="SelectedCity" Value="@_selectedCity">
     <ServersListComponent CityName="@_selectedCity" SearchValue="@_searchValue"></ServersListComponent>
