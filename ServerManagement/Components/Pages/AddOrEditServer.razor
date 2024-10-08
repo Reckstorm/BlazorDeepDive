@@ -1,0 +1,83 @@
+﻿@page "/server/{id:int?}"
+@inject NavigationManager Navigation;
+
+@if (Id == 0)
+{
+    <h3>Create Server</h3>
+}
+else
+{
+    <h3>Edit Server</h3>
+}
+<br />
+<br />
+
+<EditForm Model="_server" FormName="formServer" OnValidSubmit="Submit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    @if (Id != 0)
+    {
+        <InputNumber @bind-Value="_server.Id" hidden />
+    }
+
+    <FieldComponent Label="Name">
+        <InputComponent>
+            <InputText @bind-Value="_server.Name" class="form-control"></InputText>
+        </InputComponent>
+        <ValidationComponent>
+            <ValidationMessage For="() => _server.Name" />
+        </ValidationComponent>
+    </FieldComponent>
+
+    <FieldComponent Label="City">
+        <InputComponent>
+            <InputText @bind-Value="_server.City" class="form-control"></InputText>
+        </InputComponent>
+        <ValidationComponent>
+            <ValidationMessage For="() => _server.City" />
+        </ValidationComponent>
+    </FieldComponent>
+
+    <FieldComponent Label="City">
+        <InputComponent>
+            <InputCheckbox @bind-Value="_server.IsRunning" class="form-check-input"></InputCheckbox>
+        </InputComponent>
+    </FieldComponent>
+    <button type="submit" class="btn btn-primary">@(Id == 0 ? "Create" : "Update")</button>
+    &nbsp
+    <a href="/servers" class="btn btn-primary">Close</a>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; } = 0;
+
+    [SupplyParameterFromForm]
+    private Server _server { get; set; }
+
+    [SupplyParameterFromQuery]
+    private string City { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (Id == 0)
+        {
+            _server = new Server() { IsRunning = false };
+            if (_server != null && !string.IsNullOrWhiteSpace(City))
+                _server.City = City;
+        }
+        else
+            _server = ServersRepository.GetServerById(Id);
+
+
+    }
+
+    private void Submit()
+    {
+        if (Id == 0)
+            ServersRepository.AddServer(_server);
+        else
+            ServersRepository.UpdateServer(Id, _server);
+
+        Navigation.NavigateTo($"/servers/back_from/{_server.City}");
+    }
+}

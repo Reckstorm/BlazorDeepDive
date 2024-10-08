@@ -1,10 +1,12 @@
 ﻿@page "/servers"
+@page "/servers/back_from/{cityName}"
+
 @rendermode InteractiveServer
 @inject NavigationManager Navigation;
 
 <h3>Servers</h3>
 <br />
-<CitiesListComponent @ref="citiesListComponent" HandleCitySelection="HandleCitySelection"></CitiesListComponent>
+<CitiesListComponent @ref="citiesListComponent" HandleCitySelection="HandleCitySelection" selectedCity="@_selectedCity"></CitiesListComponent>
 <br />
 <SearchBarComponent @ref="searchBarComponent" HandleSearchEvent="HandleServerSearch" style="width: 1000px"></SearchBarComponent>
 <br />
@@ -12,11 +14,14 @@
     <ServersListComponent CityName="@_selectedCity" SearchValue="@_searchValue" SomeParam="@_someParam"></ServersListComponent>
 </CascadingValue>
 <br />
-<a href="/servers/create" class="btn btn-primary">Add server</a>
-<button class="btn btn-primary" @onclick=@(() => _someParam = new Random().Next()) >Change Param</button>
+<a href="/server?city=@_selectedCity" class="btn btn-primary">Add server</a>
+<button class="btn btn-primary" @onclick=@(() => _someParam = new Random().Next())>Change Param</button>
 
 
 @code {
+    [Parameter]
+    public string CityName { get; set; }
+
     private string _selectedCity { get; set; } = "Toronto";
 
     private string _searchValue { get; set; }
@@ -36,5 +41,15 @@
         _searchValue = string.Empty;
         searchBarComponent?.ClearSearchValue();
         _selectedCity = cityName;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender) return;
+        if (Navigation.Uri.Contains("back_from") && !string.IsNullOrWhiteSpace(CityName))
+        {
+            _selectedCity = CityName;
+            StateHasChanged();
+        }
     }
 }

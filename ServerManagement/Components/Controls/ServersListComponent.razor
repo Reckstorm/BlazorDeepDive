@@ -25,7 +25,7 @@
     [Parameter]
     public int SomeParam { get; set; }
 
-    private System.Threading.Timer _timer;
+    // private System.Threading.Timer _timer;
 
     private List<Server> _servers { get; set; }
 
@@ -70,10 +70,10 @@
 
             StateHasChanged();
 
-            _timer = new System.Threading.Timer(_ =>
-            {
-                base.InvokeAsync(StateHasChanged);
-            }, null, 2000, 2000);
+            // _timer = new System.Threading.Timer(_ =>
+            // {
+            //     base.InvokeAsync(StateHasChanged);
+            // }, null, 2000, 2000);
         }
         Console.WriteLine($"{nameof(OnAfterRenderAsync)} : {Guid.NewGuid()}");
         return Task.CompletedTask;

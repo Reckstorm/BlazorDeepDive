@@ -32,7 +32,7 @@
             {
                 <button class="btn btn-outline-success" @onclick="@(() => Server.IsRunning = true)">Turn On</button>
             }
-            <a href="/servers/@Server.Id" class="btn btn-outline-primary">Edit</a>
+            <a href="/server/@Server.Id" class="btn btn-outline-primary">Edit</a>
             <button type="button" class="btn btn-outline-danger" @onclick="@(() => Delete(Server.Id))">Delete</button>
         </td>
 @*         <td>
