@@ -1,0 +1,54 @@
+﻿@page "/saveServer"
+
+@inject NavigationManager Navigation;
+@inject ContainerStorage ContainerStorage;
+
+@rendermode InteractiveServer
+
+<h3>Set Server Status</h3>
+<br />
+
+@if (!string.IsNullOrWhiteSpace(_errorMessage))
+{
+    <div>
+        <span class="alert alert-danger">@_errorMessage</span>
+    </div>
+}
+
+<FieldComponent Label="Server Status">
+    <InputComponent>
+        <input type="checkbox" class="form-check-input" @bind-value="@_serverStatus" />
+    </InputComponent>
+</FieldComponent>
+<br />
+<button class="btn btn-primary" @onclick="Save">Next</button>
+
+@code {
+    private Server _server { get; set; }
+
+    private bool _serverStatus { get; set; }
+
+    private string _errorMessage { get; set; }
+
+    protected override void OnAfterRender(bool firstrender)
+    {
+        if (firstrender)
+        {
+            _server = ContainerStorage.GetServer();
+            if (_server != null && (string.IsNullOrWhiteSpace(_server.Name) || string.IsNullOrWhiteSpace(_server.City)))
+                _errorMessage = "Server name is invalid restart wizard";
+        }
+    }
+
+    private void Save()
+    {
+        if (!string.IsNullOrWhiteSpace(_errorMessage))
+            return;
+
+        _server.IsRunning = _serverStatus;
+
+        ServersRepository.AddServer(_server);
+        ContainerStorage.SetServer(null);
+        Navigation.NavigateTo($"/servers/back_from/{_server.City}");
+    }
+}

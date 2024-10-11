@@ -3,6 +3,7 @@
 
 @rendermode InteractiveServer
 @inject NavigationManager Navigation;
+@inject TorontoOnlineServersStore TorontoOnlineServersStore;
 
 <h3>Servers</h3>
 <br />
@@ -14,7 +15,8 @@
     <ServersListComponent CityName="@_selectedCity" SearchValue="@_searchValue" SomeParam="@_someParam"></ServersListComponent>
 </CascadingValue>
 <br />
-<a href="/server?city=@_selectedCity" class="btn btn-primary">Add server</a>
+@* <a href="/server?city=@_selectedCity" class="btn btn-primary">Add server</a> *@
+<a href="/serverName" class="btn btn-primary">Add server</a>
 <button class="btn btn-primary" @onclick=@(() => _someParam = new Random().Next())>Change Param</button>
 
 
@@ -51,5 +53,9 @@
             _selectedCity = CityName;
             StateHasChanged();
         }
+
+        var serversToronto = ServersRepository.GetServersByCity("Toronto").Count(x => x.IsRunning);
+        if (serversToronto != null)
+            TorontoOnlineServersStore.NumServersOnline = serversToronto;
     }
 }

@@ -1,0 +1,54 @@
+﻿@page "/serverName"
+
+@inject NavigationManager Navigation;
+@inject ContainerStorage ContainerStorage;
+
+@rendermode InteractiveServer
+
+<h3>Add Server Name</h3>
+<br />
+
+<FieldComponent Label="Server Name">
+    <InputComponent>
+        <input type="text" class="form-control" @bind-value="@_serverName" />
+    </InputComponent>
+    <ValidationComponent>
+        @if (!string.IsNullOrWhiteSpace(_errorMessage))
+        {
+            <div>
+                <span class="alert alert-danger">@_errorMessage</span>
+            </div>
+        }
+    </ValidationComponent>
+</FieldComponent>
+<br/>
+<button class="btn btn-primary" @onclick="Next">Next</button>
+
+@code {
+    private Server _server { get; set; }
+
+    private string _serverName { get; set; }
+
+    private string _errorMessage { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+        {
+            _server = new Server();
+            StateHasChanged();
+        }
+    }
+
+    private void Next()
+    {
+        if (string.IsNullOrWhiteSpace(_serverName))
+        {
+            _errorMessage = "Provide a valid server name";
+            return;
+        }
+        _server.Name = _serverName;
+        ContainerStorage.SetServer(_server);
+        Navigation.NavigateTo("/serverCity");
+    }
+}

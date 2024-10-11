@@ -1,9 +1,17 @@
-﻿<div class="col">
+﻿@implements IDisposable
+
+@inject TorontoOnlineServersStore TorontoOnlineServersStore;
+
+<div class="col">
     <div class="card @(SelectedCity.Equals(City)?"border border-success":"")">
         <img src="/images/@(City).png" class="card-img-top" alt="...">
         <div class="card-body">
             <button type="button" class="btn btn-primary" @onclick="@(() => SelectCity(City))">@City</button>
         </div>
+        @if (City.Equals("Toronto", StringComparison.OrdinalIgnoreCase))
+        {
+            <span>@ServersOnline</span>
+        }
     </div>
 </div>
 
@@ -17,5 +25,26 @@
     [Parameter]
     public EventCallback<string> HandleCitySelection { get; set; }
 
+    private int ServersOnline;
+
     private void SelectCity(string cityName) => HandleCitySelection.InvokeAsync(cityName);
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender) return;
+        ServersOnline = TorontoOnlineServersStore.NumServersOnline;
+        TorontoOnlineServersStore.AddStateChangeListener(UpdateServersOnline);
+        StateHasChanged();
+    }
+
+    private void UpdateServersOnline()
+    {
+        ServersOnline = TorontoOnlineServersStore.NumServersOnline;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        TorontoOnlineServersStore.RemoveStateChangeListener(UpdateServersOnline);
+    }
 }

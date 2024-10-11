@@ -1,0 +1,69 @@
+﻿@page "/serverCity"
+
+@inject NavigationManager Navigation;
+@inject ContainerStorage ContainerStorage;
+
+@rendermode InteractiveServer
+
+<h3>Add Server City</h3>
+<br />
+
+@if (!string.IsNullOrWhiteSpace(_nameErrorMessage))
+{
+    <div>
+        <span class="alert alert-danger">@_nameErrorMessage</span>
+    </div>
+}
+
+<FieldComponent Label="Server City">
+    <InputComponent>
+        <input type="text" class="form-control" @bind-value="@_serverCity" />
+    </InputComponent>
+    <ValidationComponent>
+        @if (!string.IsNullOrWhiteSpace(_errorMessage))
+        {
+            <div>
+                <span class="alert alert-danger">@_errorMessage</span>
+            </div>
+        }
+    </ValidationComponent>
+</FieldComponent>
+
+<br />
+<button class="btn btn-primary" @onclick="Next">Next</button>
+
+@code {
+    private Server _server { get; set; }
+
+    private string _serverCity { get; set; }
+
+    private string _nameErrorMessage { get; set; }
+
+    private string _errorMessage { get; set; }
+
+    protected override void OnAfterRender(bool firstrender)
+    {
+        if (firstrender)
+        {
+            _server = ContainerStorage.GetServer();
+            if (_server != null && string.IsNullOrWhiteSpace(_server.Name))
+                _nameErrorMessage = "Server name is invalid restart wizard";
+        }
+    }
+
+    private void Next()
+    {
+        if (!string.IsNullOrWhiteSpace(_nameErrorMessage))
+            return;
+        else if (string.IsNullOrWhiteSpace(_serverCity))
+        {
+            _errorMessage = "Provide a valid city name";
+            return;
+        }
+
+        _server.City = _serverCity;
+
+        ContainerStorage.SetServer(_server);
+        Navigation.NavigateTo("/saveServer");
+    }
+}

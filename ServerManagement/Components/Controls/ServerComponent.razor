@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager Navigation
+@inject TorontoOnlineServersStore TorontoOnlineServersStore;
 
 @if (Server != null)
 {
@@ -11,7 +12,8 @@
         </td>
         <td>
             <span style="color:@((Server.IsRunning?"green":"red"))">
-            @(Server.IsRunning ? "Online" : "Offline")</span>
+                @(Server.IsRunning ? "Online" : "Offline")
+            </span>
         </td>
         <td>
             @if (Server.IsRunning)
@@ -26,20 +28,20 @@
         <td>
             @if (Server.IsRunning)
             {
-                <button class="btn btn-outline-danger" @onclick="@(() => Server.IsRunning = false)">Turn Off</button>
+                <button class="btn btn-outline-danger" @onclick="@(() => ChangeStatus(false))">Turn Off</button>
             }
             else
             {
-                <button class="btn btn-outline-success" @onclick="@(() => Server.IsRunning = true)">Turn On</button>
+                <button class="btn btn-outline-success" @onclick="@(() => ChangeStatus(true))">Turn On</button>
             }
             <a href="/server/@Server.Id" class="btn btn-outline-primary">Edit</a>
             <button type="button" class="btn btn-outline-danger" @onclick="@(() => Delete(Server.Id))">Delete</button>
         </td>
-@*         <td>
-            <EditForm Model="Server" FormName="@($"formDelete-{Server.Id}")" OnValidSubmit="() => Delete(Server.Id)">
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </EditForm>
-        </td> *@
+        @*         <td>
+    <EditForm Model="Server" FormName="@($"formDelete-{Server.Id}")" OnValidSubmit="() => Delete(Server.Id)">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    </EditForm>
+    </td> *@
     </tr>
 }
 
@@ -62,7 +64,7 @@
 
     private string GetBGColor()
     {
-        if(SelectedCity != null)
+        if (SelectedCity != null)
         {
             switch (SelectedCity)
             {
@@ -74,5 +76,18 @@
             }
         }
         return "white";
+    }
+
+    private void ChangeStatus(bool status)
+    {
+        if (Server != null && Server.IsRunning != status)
+        {
+            if (Server.City.Equals("Toronto", StringComparison.OrdinalIgnoreCase))
+            {
+                if (status) TorontoOnlineServersStore.NumServersOnline++;
+                else TorontoOnlineServersStore.NumServersOnline--;
+            }
+            Server.IsRunning = status;
+        }
     }
 }
