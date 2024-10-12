@@ -2,6 +2,7 @@
 
 @inject NavigationManager Navigation;
 @inject ContainerStorage ContainerStorage;
+@inject CitiesOnlineServersStore CitiesOnlineServersStore;
 
 @rendermode InteractiveServer
 
@@ -46,6 +47,8 @@
             return;
 
         _server.IsRunning = _serverStatus;
+
+        CitiesOnlineServersStore.UpdateOnlineServersCount(_server.City, _server.IsRunning);
 
         ServersRepository.AddServer(_server);
         ContainerStorage.SetServer(null);

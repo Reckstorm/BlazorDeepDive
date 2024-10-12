@@ -3,7 +3,8 @@
 
 @rendermode InteractiveServer
 @inject NavigationManager Navigation;
-@inject TorontoOnlineServersStore TorontoOnlineServersStore;
+@* @inject TorontoOnlineServersStore TorontoOnlineServersStore; *@
+@inject CitiesOnlineServersStore CitiesOnlineServersStore;
 
 <h3>Servers</h3>
 <br />
@@ -54,8 +55,8 @@
             StateHasChanged();
         }
 
-        var serversToronto = ServersRepository.GetServersByCity("Toronto").Count(x => x.IsRunning);
-        if (serversToronto != null)
-            TorontoOnlineServersStore.NumServersOnline = serversToronto;
+        // var serversToronto = ServersRepository.GetServersByCity("Toronto").Count(x => x.IsRunning);
+        // if (serversToronto != null)
+        //     TorontoOnlineServersStore.NumServersOnline = serversToronto;
     }
 }

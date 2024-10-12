@@ -1,5 +1,6 @@
 ﻿@page "/server/{id:int?}"
 @inject NavigationManager Navigation;
+@inject CitiesOnlineServersStore CitiesOnlineServersStore;
 
 @if (Id == 0)
 {
@@ -77,6 +78,8 @@ else
             ServersRepository.AddServer(_server);
         else
             ServersRepository.UpdateServer(Id, _server);
+
+        CitiesOnlineServersStore.UpdateOnlineServersCount(_server.City, _server.IsRunning);
 
         Navigation.NavigateTo($"/servers/back_from/{_server.City}");
     }

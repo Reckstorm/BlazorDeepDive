@@ -1,6 +1,7 @@
 ﻿@implements IDisposable
 
-@inject TorontoOnlineServersStore TorontoOnlineServersStore;
+@* @inject TorontoOnlineServersStore TorontoOnlineServersStore; *@
+@inject CitiesOnlineServersStore CitiesOnlineServersStore;
 
 <div class="col">
     <div class="card @(SelectedCity.Equals(City)?"border border-success":"")">
@@ -8,10 +9,7 @@
         <div class="card-body">
             <button type="button" class="btn btn-primary" @onclick="@(() => SelectCity(City))">@City</button>
         </div>
-        @if (City.Equals("Toronto", StringComparison.OrdinalIgnoreCase))
-        {
-            <span>@ServersOnline</span>
-        }
+        <span>@ServersOnline</span>
     </div>
 </div>
 
@@ -27,24 +25,39 @@
 
     private int ServersOnline;
 
+    private CityStore _cityStore;
+
     private void SelectCity(string cityName) => HandleCitySelection.InvokeAsync(cityName);
 
     protected override void OnAfterRender(bool firstRender)
     {
         if (!firstRender) return;
-        ServersOnline = TorontoOnlineServersStore.NumServersOnline;
-        TorontoOnlineServersStore.AddStateChangeListener(UpdateServersOnline);
-        StateHasChanged();
+        // ServersOnline = TorontoOnlineServersStore.NumServersOnline;
+        // TorontoOnlineServersStore.AddStateChangeListener(UpdateServersOnline);
+        // StateHasChanged();
+
+        _cityStore = CitiesOnlineServersStore.Cities.Find(c => c.City.Equals(City, StringComparison.OrdinalIgnoreCase));
+        if (_cityStore != null)
+        {
+            ServersOnline = _cityStore.ServersOnline;
+            _cityStore.AddStateChangeListener(UpdateServersOnline);
+            StateHasChanged();
+        }
+
     }
 
     private void UpdateServersOnline()
     {
-        ServersOnline = TorontoOnlineServersStore.NumServersOnline;
+        // ServersOnline = TorontoOnlineServersStore.NumServersOnline;
+        // StateHasChanged();
+        ServersOnline = _cityStore.ServersOnline;
         StateHasChanged();
     }
 
     public void Dispose()
     {
-        TorontoOnlineServersStore.RemoveStateChangeListener(UpdateServersOnline);
+        // TorontoOnlineServersStore.RemoveStateChangeListener(UpdateServersOnline);
+        if (_cityStore != null)
+            _cityStore.RemoveStateChangeListener(UpdateServersOnline);
     }
 }

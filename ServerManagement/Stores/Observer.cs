@@ -2,7 +2,7 @@
 {
     public class Observer
     {
-        protected Action _listeners;
+        protected event Action _listeners;
 
         public void AddStateChangeListener(Action listener)
         {

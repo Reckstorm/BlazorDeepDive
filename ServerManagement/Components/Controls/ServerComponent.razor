@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager Navigation
-@inject TorontoOnlineServersStore TorontoOnlineServersStore;
+@* @inject TorontoOnlineServersStore TorontoOnlineServersStore; *@
+@inject CitiesOnlineServersStore CitiesOnlineServersStore;
 
 @if (Server != null)
 {
@@ -53,6 +54,8 @@
     [CascadingParameter(Name = "SelectedCity")]
     public string SelectedCity { get; set; }
 
+    private CityStore _cityStore;
+
     private void Delete(int serverId)
     {
         if (serverId > 0)
@@ -60,6 +63,17 @@
             ServersRepository.DeleteServer(serverId);
             Navigation.NavigateTo("/servers", true);
         }
+    }
+
+    // protected override void OnAfterRender(bool firstRender)
+    // {
+    //     if (!firstRender) return;
+
+    // }
+
+    protected override void OnParametersSet()
+    {
+        _cityStore = CitiesOnlineServersStore.Cities.Find(c => c.City.Equals(Server.City, StringComparison.OrdinalIgnoreCase));
     }
 
     private string GetBGColor()
@@ -82,11 +96,14 @@
     {
         if (Server != null && Server.IsRunning != status)
         {
-            if (Server.City.Equals("Toronto", StringComparison.OrdinalIgnoreCase))
-            {
-                if (status) TorontoOnlineServersStore.NumServersOnline++;
-                else TorontoOnlineServersStore.NumServersOnline--;
-            }
+            CitiesOnlineServersStore.UpdateOnlineServersCount(Server.City, status);
+
+
+            // if (Server.City.Equals("Toronto", StringComparison.OrdinalIgnoreCase))
+            // {
+            //     if (status) TorontoOnlineServersStore.NumServersOnline++;
+            //     else TorontoOnlineServersStore.NumServersOnline--;
+            // }
             Server.IsRunning = status;
         }
     }
