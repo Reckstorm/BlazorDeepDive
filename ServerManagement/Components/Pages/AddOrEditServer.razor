@@ -1,6 +1,7 @@
 ﻿@page "/server/{id:int?}"
 @inject NavigationManager Navigation;
 @inject CitiesOnlineServersStore CitiesOnlineServersStore;
+@inject IServersEFCoreRepository ServersEFCoreRepository;
 
 @if (Id == 0)
 {
@@ -67,7 +68,7 @@ else
                 _server.City = City;
         }
         else
-            _server = ServersRepository.GetServerById(Id);
+            _server = ServersEFCoreRepository.GetServerById(Id);
 
 
     }
@@ -75,9 +76,9 @@ else
     private void Submit()
     {
         if (Id == 0)
-            ServersRepository.AddServer(_server);
+            ServersEFCoreRepository.AddServer(_server);
         else
-            ServersRepository.UpdateServer(Id, _server);
+            ServersEFCoreRepository.UpdateServer(Id, _server);
 
         CitiesOnlineServersStore.UpdateOnlineServersCount(_server.City, _server.IsRunning);
 

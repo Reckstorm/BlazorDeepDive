@@ -1,4 +1,6 @@
-﻿<table class="table table-striped">
+﻿@inject IServersEFCoreRepository ServersEFCoreRepository;
+
+<table class="table table-striped">
     <RepeaterComponent Items="_servers">
         <Header>
             <thead>
@@ -52,9 +54,9 @@
     protected override void OnParametersSet()
     {
         if (string.IsNullOrEmpty(SearchValue))
-            _servers = ServersRepository.GetServersByCity(CityName);
+            _servers = ServersEFCoreRepository.GetServersByCity(CityName);
         else
-            _servers = ServersRepository.SearchServers(SearchValue);
+            _servers = ServersEFCoreRepository.SearchServers(SearchValue);
         Console.WriteLine($"{nameof(OnParametersSet)} : {Guid.NewGuid()}");
     }
 
@@ -64,9 +66,9 @@
         if (firstRender)
         {
             if (string.IsNullOrWhiteSpace(this.SearchValue))
-                _servers = ServersRepository.GetServersByCity(CityName ?? "Toronto");
+                _servers = ServersEFCoreRepository.GetServersByCity(CityName ?? "Toronto");
             else
-                _servers = ServersRepository.SearchServers(SearchValue);
+                _servers = ServersEFCoreRepository.SearchServers(SearchValue);
 
             StateHasChanged();
 

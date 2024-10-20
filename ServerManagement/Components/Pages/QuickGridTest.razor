@@ -1,5 +1,6 @@
 ﻿@page "/qgtest"
 @using Microsoft.AspNetCore.Components.QuickGrid
+@inject IServersEFCoreRepository ServersEFCoreRepository;
 
 @rendermode InteractiveServer
 
@@ -57,14 +58,20 @@
 
 
 @code {
-    private List<Server> _servers = ServersRepository.GetServers();
+    private List<Server> _servers;
     private void Delete(int serverId)
     {
         if (serverId > 0)
         {
-            ServersRepository.DeleteServer(serverId);
+            ServersEFCoreRepository.DeleteServer(serverId);
             Navigation.NavigateTo("/qgtest", true);
         }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender) return;
+        _servers = ServersEFCoreRepository.GetServers();
     }
 
     private PaginationState _paginationState = new PaginationState() { ItemsPerPage = 5 };

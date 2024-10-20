@@ -3,6 +3,7 @@
 @inject NavigationManager Navigation;
 @inject ContainerStorage ContainerStorage;
 @inject CitiesOnlineServersStore CitiesOnlineServersStore;
+@inject IServersEFCoreRepository ServersEFCoreRepository;
 
 @rendermode InteractiveServer
 
@@ -50,7 +51,7 @@
 
         CitiesOnlineServersStore.UpdateOnlineServersCount(_server.City, _server.IsRunning);
 
-        ServersRepository.AddServer(_server);
+        ServersEFCoreRepository.AddServer(_server);
         ContainerStorage.SetServer(null);
         Navigation.NavigateTo($"/servers/back_from/{_server.City}");
     }

@@ -1,6 +1,7 @@
 ﻿@inject NavigationManager Navigation
 @* @inject TorontoOnlineServersStore TorontoOnlineServersStore; *@
 @inject CitiesOnlineServersStore CitiesOnlineServersStore;
+@inject IServersEFCoreRepository ServersEFCoreRepository;
 
 @if (Server != null)
 {
@@ -60,7 +61,7 @@
     {
         if (serverId > 0)
         {
-            ServersRepository.DeleteServer(serverId);
+            ServersEFCoreRepository.DeleteServer(serverId);
             Navigation.NavigateTo("/servers", true);
         }
     }
@@ -105,6 +106,7 @@
             //     else TorontoOnlineServersStore.NumServersOnline--;
             // }
             Server.IsRunning = status;
+            ServersEFCoreRepository.UpdateServer(Server.Id, Server);
         }
     }
 }
