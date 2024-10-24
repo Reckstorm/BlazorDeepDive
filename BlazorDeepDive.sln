@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAssemblyDemo", "WebAssemblyDemo\WebAssemblyDemo\WebAssemblyDemo.csproj", "{6EDE7DD0-5539-4773-A6C0-AE76308EC5D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAssemblyDemo.Client", "WebAssemblyDemo\WebAssemblyDemo.Client\WebAssemblyDemo.Client.csproj", "{33C00E98-13DE-45F2-B9DD-4DE7CAA51512}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +30,14 @@ Global
 		{EB317C9F-3F0B-455D-B632-4D5783B36F5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB317C9F-3F0B-455D-B632-4D5783B36F5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB317C9F-3F0B-455D-B632-4D5783B36F5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EDE7DD0-5539-4773-A6C0-AE76308EC5D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EDE7DD0-5539-4773-A6C0-AE76308EC5D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EDE7DD0-5539-4773-A6C0-AE76308EC5D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EDE7DD0-5539-4773-A6C0-AE76308EC5D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33C00E98-13DE-45F2-B9DD-4DE7CAA51512}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33C00E98-13DE-45F2-B9DD-4DE7CAA51512}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33C00E98-13DE-45F2-B9DD-4DE7CAA51512}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33C00E98-13DE-45F2-B9DD-4DE7CAA51512}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
